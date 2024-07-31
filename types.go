@@ -42,6 +42,7 @@ type httpapi struct {
 	Domain              string `toml:"api_domain"`
 	IP                  string
 	DisableRegistration bool   `toml:"disable_registration"`
+	RegistrationPath		string `toml:"registration_endpoint"`
 	AutocertPort        string `toml:"autocert_port"`
 	Port                string `toml:"port"`
 	TLS                 string

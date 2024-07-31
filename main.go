@@ -124,7 +124,12 @@ func startHTTPAPI(errChan chan error, config DNSConfig, dnsservers []*DNSServer)
 		c.Log = stdlog.New(logwriter, "", 0)
 	}
 	if !Config.API.DisableRegistration {
-		api.POST("/register", webRegisterPost)
+		path := Config.API.RegistrationPath
+		if (path == "") {
+			path = "/register"
+		}
+		log.WithFields(log.Fields{"regisistration_path": path}).Info("Registration endpoint")
+		api.POST(path, Auth(webRegisterPost))
 	}
 	api.POST("/update", Auth(webUpdatePost))
 	api.GET("/health", healthCheck)

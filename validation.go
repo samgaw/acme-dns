@@ -33,8 +33,10 @@ func validSubdomain(s string) bool {
 
 func validTXT(s string) bool {
 	sn := sanitizeString(s)
-	if utf8.RuneCountInString(s) == 43 && utf8.RuneCountInString(sn) == 43 {
-		// 43 chars is the current LE auth key size, but not limited / defined by ACME
+	if (utf8.RuneCountInString(s) == 43 && utf8.RuneCountInString(sn) == 43) ||
+		(utf8.RuneCountInString(s) == 64 && utf8.RuneCountInString(sn) == 64) {
+			// LetsEncrypt auth key is 43 characters
+			// Alibaba auth key is 64 characters
 		return true
 	}
 	return false

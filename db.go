@@ -164,7 +164,8 @@ func (d *acmedb) handleDBUpgradeTo1() error {
 // Create two rows for subdomain to the txt table
 func (d *acmedb) NewTXTValuesInTransaction(tx *sql.Tx, subdomain string) error {
 	var err error
-	instr := fmt.Sprintf("INSERT INTO txt (Subdomain, LastUpdate) values('%s', 0)", subdomain)
+	init_lastupdate := time.Now().Unix() -1
+	instr := fmt.Sprintf("INSERT INTO txt (Subdomain, LastUpdate) values('%s', 0)", subdomain, init_lastupdate)
 	_, _ = tx.Exec(instr)
 	_, _ = tx.Exec(instr)
 	return err
@@ -191,7 +192,7 @@ func (d *acmedb) Register(afrom cidrslice) (ACMETxt, error) {
         Username,
         Password,
         Subdomain,
-		AllowFrom) 
+		AllowFrom)
         values($1, $2, $3, $4)`
 	if Config.Database.Engine == "sqlite3" {
 		regSQL = getSQLiteStmt(regSQL)

@@ -32,16 +32,24 @@ func fileIsAccessible(fname string) bool {
 
 func readConfig(fname string) (DNSConfig, error) {
 	var conf DNSConfig
-	_, err := toml.DecodeFile(fname, &conf)
+	garbage, err := toml.DecodeFile(fname, &conf)
 	if err != nil {
 		// Return with config file parsing errors from toml package
 		return conf, err
+	}
+
+	ug := garbage.Undecoded()
+	if len(ug) > 0 {
+		return conf, fmt.Errorf("Unexpected keys: %v", ug)
 	}
 	return prepareConfig(conf)
 }
 
 // prepareConfig checks that mandatory values exist, and can be used to set default values in the future
 func prepareConfig(conf DNSConfig) (DNSConfig, error) {
+	if conf.General.Domain == "" {
+		return conf, errors.New("missing general configuration option \"domain\"")
+	}
 	if conf.Database.Engine == "" {
 		return conf, errors.New("missing database configuration option \"engine\"")
 	}

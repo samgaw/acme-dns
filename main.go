@@ -125,7 +125,7 @@ func startHTTPAPI(errChan chan error, config DNSConfig, dnsservers []*DNSServer)
 	}
 	if !Config.API.DisableRegistration {
 		path := Config.API.RegistrationPath
-		if (path == "") {
+		if path == "" {
 			path = "/register"
 		}
 		log.WithFields(log.Fields{"regisistration_path": path}).Info("Registration endpoint")

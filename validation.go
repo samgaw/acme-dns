@@ -1,8 +1,8 @@
 package main
 
 import (
-	"unicode/utf8"
 	"regexp"
+	"unicode/utf8"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -35,8 +35,8 @@ func validTXT(s string) bool {
 	sn := sanitizeString(s)
 	if (utf8.RuneCountInString(s) == 43 && utf8.RuneCountInString(sn) == 43) ||
 		(utf8.RuneCountInString(s) == 64 && utf8.RuneCountInString(sn) == 64) {
-			// LetsEncrypt auth key is 43 characters
-			// Alibaba auth key is 64 characters
+		// LetsEncrypt auth key is 43 characters
+		// Alibaba auth key is 64 characters
 		return true
 	}
 	return false

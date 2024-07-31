@@ -11,9 +11,9 @@ import (
 
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+	_ "modernc.org/sqlite"
 )
 
 // DBVersion shows the database version this code uses. This is used for update checks.
@@ -50,7 +50,12 @@ func getSQLiteStmt(s string) string {
 func (d *acmedb) Init(engine string, connection string) error {
 	d.Mutex.Lock()
 	defer d.Mutex.Unlock()
-	db, err := sql.Open(engine, connection)
+
+	driverName := engine
+	if driverName == "sqlite3" {
+		driverName = "sqlite"
+	}
+	db, err := sql.Open(driverName, connection)
 	if err != nil {
 		return err
 	}

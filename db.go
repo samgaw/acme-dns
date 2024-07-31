@@ -246,7 +246,7 @@ func (d *acmedb) GetTXTForDomain(domain string) ([]string, error) {
 	domain = sanitizeString(domain)
 	var txts []string
 
-	timeLimit := (time.Now().Unix() - (30*60))
+	timeLimit := (time.Now().Unix() - (30 * 60))
 	// acme-dns cert cannot contain more than 100 domains
 	getSQL := `
 		SELECT	Value
@@ -255,7 +255,7 @@ func (d *acmedb) GetTXTForDomain(domain string) ([]string, error) {
 			AND 	InsertDate > $2
 		ORDER
 			 BY 	InsertDate DESC
-		LIMIT 	100
+		LIMIT 	$3
 	`
 	if Config.Database.Engine == "sqlite3" {
 		getSQL = getSQLiteStmt(getSQL)
@@ -266,7 +266,7 @@ func (d *acmedb) GetTXTForDomain(domain string) ([]string, error) {
 		return txts, err
 	}
 	defer sm.Close()
-	rows, err := sm.Query(domain, timeLimit)
+	rows, err := sm.Query(domain, timeLimit, Config.General.TxtRecordLimit)
 	if err != nil {
 		return txts, err
 	}

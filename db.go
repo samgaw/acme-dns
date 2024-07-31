@@ -164,7 +164,7 @@ func (d *acmedb) handleDBUpgradeTo1() error {
 // Create two rows for subdomain to the txt table
 func (d *acmedb) NewTXTValuesInTransaction(tx *sql.Tx, subdomain string) error {
 	var err error
-	init_lastupdate := time.Now().Unix() -1
+	init_lastupdate := time.Now().Unix() - 1
 	instr := fmt.Sprintf("INSERT INTO txt (Subdomain, LastUpdate) values('%s', 0)", subdomain, init_lastupdate)
 	_, _ = tx.Exec(instr)
 	_, _ = tx.Exec(instr)

@@ -153,7 +153,7 @@ func startHTTPAPI(errChan chan error, config DNSConfig, dnsservers []*DNSServer)
 	}
 	certmagic.DefaultACME.Email = Config.API.NotificationEmail
 	certmagic.Default.Storage = &storage
-  certmagic.Default.DefaultServerName = Config.General.Domain
+	certmagic.Default.DefaultServerName = Config.General.Domain
 
 	magic := certmagic.NewDefault()
 

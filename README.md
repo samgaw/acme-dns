@@ -104,6 +104,36 @@ The method allows you to update the TXT answer contents of your unique subdomain
 }
 ```
 
+# Delete endpoint
+
+This method allows you to delete TXT records of your unique subdomain after they have been used for validation.
+Usually carried automatically by automated ACME client.
+
+```POST /delete```
+
+#### Required headers
+| Header name   | Description                                | Example                                               |
+| ------------- |--------------------------------------------|-------------------------------------------------------|
+| X-Api-User    | UUIDv4 username received from registration | `X-Api-User: c36f50e8-4632-44f0-83fe-e070fef28a10`    |
+| X-Api-Key     | Password received from registration        | `X-Api-Key: htB9mR9DYgcu9bX_afHF62erXaH2TS7bg9KW3F7Z` |
+
+#### Example input
+```json
+{
+    "subdomain": "8e5700ea-a4bf-41c7-8a77-e990661dcc6a",
+    "txt": "___validation_token_received_from_the_ca___"
+}
+```
+
+#### Response
+
+```Status: 200 OK```
+```json
+{
+    "txt": "___validation_token_received_from_the_ca___"
+}
+```
+
 ### Health check endpoint
 
 The method can be used to check readiness and/or liveness of the server. It will return status code 200 on success or won't be reachable.
@@ -121,7 +151,7 @@ See the INSTALL section for information on how to do this.
 
 1) Install [Go 1.13 or newer](https://golang.org/doc/install).
 
-2) Build acme-dns: 
+2) Build acme-dns:
 ```
 git clone https://github.com/joohoi/acme-dns
 cd acme-dns
@@ -188,7 +218,7 @@ docker run --rm --name acmedns                 \
 Note: In this documentation:
 - `auth.example.org` is the hostname of the acme-dns server
 - acme-dns will serve `*.auth.example.org` records
-- `198.51.100.1` is the **public** IP address of the system running acme-dns  
+- `198.51.100.1` is the **public** IP address of the system running acme-dns
 
 These values should be changed based on your environment.
 
@@ -244,7 +274,7 @@ nsname = "auth.example.org"
 nsadmin = "admin.example.org"
 # predefined records served in addition to the TXT
 records = [
-    # domain pointing to the public IP of your acme-dns server 
+    # domain pointing to the public IP of your acme-dns server
     "auth.example.org. A 198.51.100.1",
     # specify that auth.example.org will resolve any *.auth.example.org records
     "auth.example.org. NS auth.example.org.",
